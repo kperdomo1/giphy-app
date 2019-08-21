@@ -13,19 +13,19 @@
   .col {
     width: 25%;
     @media (max-width: 960px) {
-      width: 33.333333333%;
-    }
-    @media (max-width: 720px) {
       width: 50%;
     }
-
-    @media (max-width: 480px) {
+    @media (max-width: 540px) {
       width: 100%
     }
 
     .item {
       padding: 6px;
       box-sizing: border-box;
+
+      img {
+        width: 100%;
+      }
     }
   }
 }

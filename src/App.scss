@@ -13,13 +13,4 @@
       background-position: -135% 0%;
     }
   }
-
-  &.skeleton-line {
-    width: 100px;
-    border-radius: 5px;
-
-    &::before {
-      content: "\00a0";
-    }
-  }
 }

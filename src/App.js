@@ -10,22 +10,28 @@ class App extends Component {
     this.state = {
       searchTerm: '',
       loading: false,
-      gifs: []
+      gifs: [],
+      offset: 0,
+      totalCount: 0,
     };
     this.searchTimer = null;
   }
 
-  searchGif = (term) => {
-    const searchTerm = term;
+  // Triggers an HTTP request to Giphy API for fetching user-requested gifs
+  searchGif = (searchTerm) => {
+    // Since this triggers on every key pressed, add a delay before fetching
+    // as user might still be typing
     if (this.searchTimer) {
       clearTimeout(this.searchTimer);
     }
     this.setState({ searchTerm });
     this.searchTimer = setTimeout(async () => {
       console.log('searching!');
-      this.setState({ loading: true, gifs: [] });
-      const gifs = await search(searchTerm);
-      this.setState({ loading: false, gifs });
+      this.setState({ loading: true, gifs: [], offset: 0, totalCount: 0 });
+      const response = await search(searchTerm);
+      console.log('response', response);
+      const { pagination } = response;
+      this.setState({ loading: false, gifs: response.data, offset: pagination.offset, totalCount: pagination.total_count });
     }, 600);
   };
 

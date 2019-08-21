@@ -5,7 +5,7 @@ import './searchbar.scss';
 const Searchbar = ({ onChange }) => (
   <div className="searchbar-wrapper">
     <div className="input-container">
-      <input onChange={onChange} autoFocus={true} type="text" placeholder="Search for gifs!" />
+      <input onChange={ev => onChange(ev.target.value)} autoFocus={true} type="text" placeholder="Search for gifs!" />
       <div className="search-icon">
         <SearchIcon />
       </div>
