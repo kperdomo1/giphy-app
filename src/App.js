@@ -15,6 +15,7 @@ class App extends Component {
       totalCount: 0,
     };
     this.searchTimer = null;
+    // Since state update is async, we use this field to prevent multiple lazy-load fetches
     this.lazyLoading = false;
   }
 
@@ -34,17 +35,23 @@ class App extends Component {
       clearTimeout(this.searchTimer);
     }
     this.setState({ searchTerm });
+    this.lazyLoading = true;
     this.searchTimer = setTimeout(async () => {
-      this.setState({ loading: true, gifs: [], offset: 0, totalCount: 0 });
+      this.setState({ loading: true, gifs: [], offset: 0, totalCount: 0, message: '' });
       const response = await search(searchTerm);
       const { pagination } = response;
+      let message = '';
+      if (response.data.length === 0) {
+        message = `Sorry, there are not results for the search "${searchTerm}"`;
+      }
       this.setState({
         loading: false,
         gifs: response.data,
         offset: pagination.offset + pagination.count,
-        totalCount: pagination.total_count
+        totalCount: pagination.total_count,
+        message
       });
-      // TODO: no result => show 'no result' message
+      this.lazyLoading = false;
     }, 600);
   };
 
@@ -71,12 +78,17 @@ class App extends Component {
   };
 
   render() {
-    const { loading, gifs } = this.state;
+    const { loading, gifs, message } = this.state;
     return (
       <div className="App">
         <Searchbar
           onChange={this.searchGif}
         />
+        {message && (
+          <div className="message">
+            <h2 className="text-center">{message}</h2>
+          </div>
+        )}
         <Gallery
           loading={loading}
           gifs={gifs}

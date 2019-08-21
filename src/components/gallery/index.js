@@ -1,6 +1,6 @@
-import React from 'react';
-import './gallery.scss';
+import React    from 'react';
 import LazyLoad from 'react-lazyload';
+import './gallery.scss';
 
 // Mock array for a skeleton content loader
 const skeletonArray = [];
@@ -8,26 +8,9 @@ for (let i = 0; i < 20; i++) {
   skeletonArray.push(i);
 }
 
-/**
- * Splits arrays into equal chunks
- * @param array
- * @param chunks
- * @returns {[]}
- */
-const splitEqually = (array, chunks) => {
-  const chunk = array.length / chunks;
-  const result = [];
-  if (array.length > 0) {
-    for (let i = 0; i < chunks; i++) {
-      result.push(array.slice(i * chunk, i * chunk + chunk));
-    }
-  }
-  return result;
-};
-
-// Based on window resolution, get the chunks the gallery should equally show gifs
+// Based on window's (initial) resolution, get the chunks the gallery should equally show gifs
 const getChunks = () => {
-  let chunks = 4;
+  let chunks        = 4;
   const windowWidth = window.innerWidth;
   if (windowWidth <= 960) {
     chunks = 2;
@@ -38,33 +21,40 @@ const getChunks = () => {
   return chunks;
 };
 
-const chunks = getChunks();
+const chunks     = getChunks();
+const columnsArr = [];
+// Calculate how many columns are we going to draw into the gallery
+for (let i = 0; i < chunks; i++) {
+  columnsArr.push(i);
+}
 
 const Gallery = ({ gifs, loading }) => (
   <>
     <div className="gallery">
-      {splitEqually(gifs, chunks).map(gifArr => (
-        <div key={gifArr[0].slug} className="col">
-          {gifArr.map(gif => (
-            <div key={gif.id} className="item">
-              <LazyLoad height={gif.images.preview_gif.height}>
-                <img src={gif.images.preview_gif.url} alt={gif.slug} />
+      { columnsArr.map(col => (
+        <div key={ col } className="col">
+          {/* in order to show this in natural way, we only draw the gifs corresponding to current column (vertical draw) */ }
+          { gifs.map((gif, index) => (index % chunks === col) ? (
+            <div key={ gif.id } className="item">
+              {/* Lazy load the image. Dont load images that aren't visible to current scrolling position */ }
+              <LazyLoad height={ gif.images.preview_gif.height }>
+                <img src={ gif.images.preview_gif.url } alt={ gif.slug }/>
               </LazyLoad>
             </div>
-          ))}
+          ) : '') }
         </div>
-      ))}
+      )) }
       { loading && (
-        splitEqually(skeletonArray, chunks).map(arr => (
-          <div key={arr.join()} className="col">
-            {arr.map(el => (
+        columnsArr.map(col => (
+          <div key={col} className="col">
+            { skeletonArray.map((el, index) => (index % chunks === col) ? (
               <div key={ el } className="item">
-                <div className="skeleton-pulse" style={{ height: Math.random() * (600 - 200 + 1) + 200}} />
+                <div className="skeleton-pulse" style={ { height: Math.random() * (600 - 200 + 1) + 200 } }/>
               </div>
-            ))}
+            ): '') }
           </div>
         ))
-      )}
+      ) }
     </div>
   </>
 );
