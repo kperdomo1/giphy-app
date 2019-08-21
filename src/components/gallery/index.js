@@ -1,38 +1,53 @@
 import React from 'react';
 import './gallery.scss';
-import mock from '../../mock';
 import LazyLoad from 'react-lazyload';
 
-const skeletonArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-
-/**
- * Splits an array into chunks
- * @param array - array to split
- * @param size - size of EACH chunk
- * @returns {[]}
- */
-function chunk(array, size) {
-  const chunked_arr = [];
-  let copied = [...array];
-  const numOfChild = Math.ceil(copied.length / size); // Round up to the nearest integer
-  for (let i = 0; i < numOfChild; i++) {
-    chunked_arr.push(copied.splice(0, size));
-  }
-  return chunked_arr;
+// Mock array for a skeleton content loader
+const skeletonArray = [];
+for (let i = 0; i < 20; i++) {
+  skeletonArray.push(i);
 }
 
-const Skeleton = ({height = 'auto'}) => (
-  <div className="skeleton-pulse" style={{ height, width: '100%', background: 'black' }} />
-);
+/**
+ * Splits arrays into equal chunks
+ * @param array
+ * @param chunks
+ * @returns {[]}
+ */
+const splitEqually = (array, chunks) => {
+  const chunk = array.length / chunks;
+  const result = [];
+  if (array.length > 0) {
+    for (let i = 0; i < chunks; i++) {
+      result.push(array.slice(i * chunk, i * chunk + chunk));
+    }
+  }
+  return result;
+};
+
+// Based on window resolution, get the chunks the gallery should equally show gifs
+const getChunks = () => {
+  let chunks = 4;
+  const windowWidth = window.innerWidth;
+  if (windowWidth <= 960) {
+    chunks = 2;
+  }
+  if (windowWidth <= 540) {
+    chunks = 1;
+  }
+  return chunks;
+};
+
+const chunks = getChunks();
 
 const Gallery = ({ gifs, loading }) => (
   <>
     <div className="gallery">
-      {chunk(gifs, 5).map(gifArr => (
-        <div key={gifArr.map(g => g.id).join()} className="col">
+      {splitEqually(gifs, chunks).map(gifArr => (
+        <div key={gifArr[0].slug} className="col">
           {gifArr.map(gif => (
             <div key={gif.id} className="item">
-              <LazyLoad height={gif.images.preview_gif.height} placeholder={<Skeleton height={gif.images.preview_gif.height} />}>
+              <LazyLoad height={gif.images.preview_gif.height}>
                 <img src={gif.images.preview_gif.url} alt={gif.slug} />
               </LazyLoad>
             </div>
@@ -40,7 +55,7 @@ const Gallery = ({ gifs, loading }) => (
         </div>
       ))}
       { loading && (
-        chunk(skeletonArray, 5).map(arr => (
+        splitEqually(skeletonArray, chunks).map(arr => (
           <div key={arr.join()} className="col">
             {arr.map(el => (
               <div key={ el } className="item">

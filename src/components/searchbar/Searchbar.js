@@ -10,7 +10,7 @@ const Searchbar = ({ onChange }) => (
         <SearchIcon />
       </div>
     </div>
-    <a className="powered-by" href="https://giphy.com/" target="_blank">
+    <a className="powered-by" href="https://giphy.com/" target="_blank" rel="noopener noreferrer">
       <img alt="powered-by-giphy" src="./powred-by.png" />
     </a>
   </div>

@@ -9,5 +9,15 @@ const URL = 'https://api.giphy.com/v1/gifs/search?api_key=' + API_KEY;
  */
 export const search = async (q, offset = 0, limit = 20) => {
   const response = await fetch(`${URL}&q=${q}&offset=${offset}&limit=${limit}`);
-  return response.json();
+  const result =  await response.json();
+  // Payloads are HUGE, so selectively take what matters to state
+  result.data = result.data.map(g => ({
+    id: g.id,
+    slug: g.slug,
+    images: {
+      preview_gif: g.images.preview_gif,
+      original: g.images.original
+    }
+  }));
+  return result;
 };
