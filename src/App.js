@@ -37,6 +37,7 @@ class App extends Component {
     this.setState({ searchTerm });
     this.lazyLoading = true;
     this.searchTimer = setTimeout(async () => {
+      if (!searchTerm) return;
       this.setState({ loading: true, gifs: [], offset: 0, totalCount: 0, message: '' });
       const response = await search(searchTerm);
       const { pagination } = response;
