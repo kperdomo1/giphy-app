@@ -14,6 +14,7 @@ export const search = async (q, offset = 0, limit = 20) => {
   result.data = result.data.map(g => ({
     id: g.id,
     slug: g.slug,
+    title: g.title,
     images: {
       preview_gif: g.images.preview_gif,
       original: g.images.original

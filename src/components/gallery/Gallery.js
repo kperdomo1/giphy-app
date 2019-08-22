@@ -1,35 +1,8 @@
 import React, { useState }    from 'react';
 import LazyLoad from 'react-lazyload';
 import Lightbox from '../lightbox';
-import mock from '../../mock';
 
 import './gallery.scss';
-
-// Mock array for a skeleton content loader
-const skeletonArray = [];
-for (let i = 0; i < 20; i++) {
-  skeletonArray.push(i);
-}
-
-// Based on window's (initial) resolution, get the chunks the gallery should equally show gifs
-const getChunks = () => {
-  let chunks        = 4;
-  const windowWidth = window.innerWidth;
-  if (windowWidth <= 960) {
-    chunks = 2;
-  }
-  if (windowWidth <= 540) {
-    chunks = 1;
-  }
-  return chunks;
-};
-
-const chunks     = getChunks();
-const columnsArr = [];
-// Calculate how many columns are we going to draw into the gallery
-for (let i = 0; i < chunks; i++) {
-  columnsArr.push(i);
-}
 
 const Gallery = ({ gifs, loading }) => {
   const [selectedGif, setSelectedGif] = useState(null);
@@ -72,5 +45,31 @@ const Gallery = ({ gifs, loading }) => {
     </>
   );
 };
+
+// Mock array for a skeleton content loader
+const skeletonArray = [];
+for (let i = 0; i < 20; i++) {
+  skeletonArray.push(i);
+}
+
+// Based on window's (initial) resolution, get the chunks the gallery should equally show gifs
+const getChunks = () => {
+  let chunks        = 4;
+  const windowWidth = window.innerWidth;
+  if (windowWidth <= 960) {
+    chunks = 2;
+  }
+  if (windowWidth <= 540) {
+    chunks = 1;
+  }
+  return chunks;
+};
+
+const chunks     = getChunks();
+const columnsArr = [];
+// Calculate how many columns are we going to draw into the gallery
+for (let i = 0; i < chunks; i++) {
+  columnsArr.push(i);
+}
 
 export default Gallery;
