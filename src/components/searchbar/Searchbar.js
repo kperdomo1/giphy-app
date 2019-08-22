@@ -1,5 +1,7 @@
 import React      from 'react';
 import SearchIcon from './SearchIcon';
+import PropTypes  from 'prop-types';
+
 import './searchbar.scss';
 
 const Searchbar = ({ onChange }) => (
@@ -15,5 +17,9 @@ const Searchbar = ({ onChange }) => (
     </a>
   </div>
 );
+
+Searchbar.propTypes = {
+  onChange: PropTypes.func.isRequired
+};
 
 export default Searchbar;

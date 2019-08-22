@@ -1,6 +1,7 @@
-import React, { useState }    from 'react';
-import LazyLoad from 'react-lazyload';
-import Lightbox from '../lightbox';
+import React, { useState } from 'react';
+import PropTypes           from 'prop-types';
+import LazyLoad            from 'react-lazyload';
+import Lightbox            from '../lightbox';
 
 import './gallery.scss';
 
@@ -71,5 +72,15 @@ const columnsArr = [];
 for (let i = 0; i < chunks; i++) {
   columnsArr.push(i);
 }
+
+Gallery.propTypes = {
+  gifs: PropTypes.array,
+  loading: PropTypes.bool
+};
+
+Gallery.defaultProps = {
+  gifs: [],
+  loading: false
+};
 
 export default Gallery;

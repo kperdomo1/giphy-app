@@ -1,4 +1,6 @@
-import React from 'react';
+import React     from 'react';
+import PropTypes from 'prop-types';
+
 import './lightbox.scss';
 
 class Lightbox extends React.Component {
@@ -49,22 +51,14 @@ class Lightbox extends React.Component {
   }
 }
 
-const getPrevValue = (current, total) => {
-  if (current === 0) {
-    current = total - 1;
-  } else {
-    current --;
-  }
-  return current;
-};
+const getPrevValue = (current, total) => (current === 0 ? total - 1 : current - 1);
 
-const getNextValue = (current, total) => {
-  if (current === total - 1) {
-    current = 0;
-  } else {
-    current ++;
-  }
-  return current;
+const getNextValue = (current, total) => (current === total - 1 ? 0 : current + 1);
+
+Lightbox.propTypes = {
+  currentIndex: PropTypes.number.isRequired,
+  gifs: PropTypes.array.isRequired,
+  onClose: PropTypes.func.isRequired
 };
 
 export default Lightbox;

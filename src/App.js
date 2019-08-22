@@ -61,9 +61,7 @@ class App extends Component {
         !this.lazyLoading && // If we r already fetching, wait for it to finish!
         offset < totalCount && // If we have stuff to fetch & we're near the bottom
         document.body.getBoundingClientRect().bottom <= window.innerHeight * 1.3) {
-      // User scrolled near the bottom of page
       this.lazyLoading = true;
-      console.log('near the bottom!!!');
       this.setState({ loading: true });
       const response = await search(searchTerm, offset);
       const { pagination } = response;
