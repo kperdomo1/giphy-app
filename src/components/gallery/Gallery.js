@@ -29,7 +29,7 @@ const Gallery = ({ gifs, loading }) => {
             <div key={col} className="col">
               { skeletonArray.map((el, index) => (index % chunks === col) ? (
                 <div key={ el } className="item">
-                  <div className="skeleton-pulse" style={ { height: Math.random() * (600 - 200 + 1) + 200 } }/>
+                  <div className="skeleton-pulse" style={ { height: Math.random() * (400 - 150 + 1) + 150 } }/>
                 </div>
               ): '') }
             </div>

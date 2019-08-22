@@ -11,8 +11,13 @@ class Lightbox extends React.Component {
     }
   }
 
-  changeCurrentSlide = (currentIndex) => {
-    this.setState({ currentIndex })
+  changeCurrentSlide = (currentIndex, animation) => {
+    const gif = document.querySelector('.current-image');
+    gif.style.animationName = animation;
+    gif.addEventListener('animationend', () => {
+      this.setState({ currentIndex });
+      gif.style.animationName = '';
+    });
   };
 
   render() {
@@ -20,31 +25,28 @@ class Lightbox extends React.Component {
     const { currentIndex } = this.state;
     const prevIndex = getPrevValue(currentIndex, gifs.length);
     const nextIndex = getNextValue(currentIndex, gifs.length);
+    const images = [
+      { gif: gifs[prevIndex], className: 'prev-image' },
+      { gif: gifs[currentIndex], className: 'current-image' },
+      { gif: gifs[nextIndex], className: 'next-image' }
+    ];
     return (
       <div className="lightbox">
         <div className="numbertext">{currentIndex + 1} / { gifs.length }</div>
-        {/* Load hidden prev image to improve UX navigation */}
-        <img
-          className="prev-image"
-          src={gifs[prevIndex].images.original.url}
-          alt={gifs[prevIndex].title}
-        />
-        <img
-          className="display-image"
-          src={gifs[currentIndex].images.original.url}
-          alt={gifs[currentIndex].title}
-        />
-        {/* Load hidden next image to improve UX navigation */}
-        <img
-          className="next-image"
-          src={gifs[nextIndex].images.original.url}
-          alt={gifs[nextIndex].title}
-        />
+        {/* Load hidden prev & next image to improve UX navigation */}
+        {images.map(img => (
+          <img
+            key={img.gif.id}
+            className={img.className}
+            src={img.gif.images.original.url}
+            alt={img.gif.title}
+          />
+        ))}
         <div className="caption-container">
           { gifs[currentIndex].title }
         </div>
-        <a className="prev" onClick={() => this.changeCurrentSlide(prevIndex)}>&#10094;</a>
-        <a className="next" onClick={() => this.changeCurrentSlide(nextIndex)}>&#10095;</a>
+        <a className="prev" onClick={() => this.changeCurrentSlide(prevIndex, 'slideOutRight')}>&#10094;</a>
+        <a className="next" onClick={() => this.changeCurrentSlide(nextIndex, 'slideOutLeft')}>&#10095;</a>
         <span className="close cursor" onClick={onClose}>&times;</span>
       </div>
     );
